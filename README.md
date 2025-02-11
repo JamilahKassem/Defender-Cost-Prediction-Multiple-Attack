@@ -49,10 +49,10 @@ Main
 
 After the simulation completes, results will be displayed in the MATLAB command window and a graph plot will be displayed and saved in the main folder.
 Simulation Parameters
--Resource Set: Define the set of resources, either manually or by specifying a range for random generation.
--Number of Nodes: Set the total number of nodes in the network.
--Number of Attacks: Specify how many attacks will be simulated during the run.
--Resource Criticality: Assign criticality values to resources, either uniformly or with a specified deviation to represent varying levels of importance.
+- **Resource Set:** Define the set of resources, either manually or by specifying a range for random generation.
+- **Number of Nodes:** Set the total number of nodes in the network.
+- **Number of Attacks:** Specify how many attacks will be simulated during the run.
+- **Resource Criticality:** Assign criticality values to resources, either uniformly or with a specified deviation to represent varying levels of importance.
 
 Cost Calculation
 The defender's cost is composed of two main components:
