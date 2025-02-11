@@ -31,7 +31,7 @@ This MATLAB project implements an iterative simulation that enables a defender t
 
 2. Set Up MATLAB Environment:
 
-Ensure you have MATLAB installed on your system. This project was developed and tested with MATLAB R2021a, but it should be compatible with other versions as well.
+Ensure you have MATLAB installed on your system. This project was developed and tested with MATLAB R2024b, but it should be compatible with other versions as well.
 Add the project directory to the MATLAB path:
 ### Running the Simulation
 To run the simulation, use the following MATLAB script:
