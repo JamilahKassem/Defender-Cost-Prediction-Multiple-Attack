@@ -33,9 +33,12 @@ This MATLAB project implements an iterative simulation that enables a defender t
 
 Ensure you have MATLAB installed on your system. This project was developed and tested with MATLAB R2021a, but it should be compatible with other versions as well.
 Add the project directory to the MATLAB path:
+### Running the Simulation
+To run the simulation, use the following MATLAB script:
 
+```matlab
 addpath(genpath('path_to_your_project_directory'));
-
+```
 ## Usage
 
 1. Configure Simulation Parameters:
@@ -45,7 +48,9 @@ Edit the config.m file to set up your simulation parameters, including the numbe
 2. Run the Simulation:
 
 Execute the main script to start the simulation:
+```matlab
    Main
+```
 
 Main
 3. View Results:
