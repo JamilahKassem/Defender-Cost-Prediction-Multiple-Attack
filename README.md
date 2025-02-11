@@ -36,7 +36,8 @@ Add the project directory to the MATLAB path:
 
 addpath(genpath('path_to_your_project_directory'));
 
-Usage
+**Usage**
+
 1. Configure Simulation Parameters:
 
 Edit the config.m file to set up your simulation parameters, including the number of nodes, resources, and attack scenarios.
@@ -48,22 +49,27 @@ Main
 3. View Results:
 
 After the simulation completes, results will be displayed in the MATLAB command window and a graph plot will be displayed and saved in the main folder.
-Simulation Parameters
+
+**Simulation Parameters**
+
 - **Resource Set:** Define the set of resources, either manually or by specifying a range for random generation.
 - **Number of Nodes:** Set the total number of nodes in the network.
 - **Number of Attacks:** Specify how many attacks will be simulated during the run.
 - **Resource Criticality:** Assign criticality values to resources, either uniformly or with a specified deviation to represent varying levels of importance.
 
-Cost Calculation
+**Cost Calculation**
+
 The defender's cost is composed of two main components:
 
 1. Resource Movement Cost: Incurred when moving resources to new nodes if their current node is under attack.
 2. Backup/Redundancy Cost: Incurred when disabling compromised resources and activating backups or mirrors available in other nodes.
 
-Algorithm Details
+**Algorithm Details**
+
 This simulation is based on the algorithm proposed in Title of the Paper. The algorithm focuses on optimizing resource allocation and movement strategies to minimize defender costs in response to attacks on a multi-resource network.
 
-Contributing
+**Contributing**
+
 We welcome contributions to enhance this project. To contribute:
 
 1. Fork the repository.
@@ -73,9 +79,11 @@ We welcome contributions to enhance this project. To contribute:
 5. Open a Pull Request.
 Please ensure your code adheres to the project's coding standards and includes appropriate tests.
 
-License
+**License**
+
 This project is licensed under. See the LICENSE file for details.
 
-References
+**References**
+
 Title of the Paper: Description or abstract of the paper.
 For further information or questions, please contact Jamil Ahmad Kassem.
