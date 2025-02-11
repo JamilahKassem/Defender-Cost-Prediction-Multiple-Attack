@@ -86,3 +86,12 @@ This project is licensed under. See the LICENSE file for details.
 
 Title of the Paper: Description or abstract of the paper.
 For further information or questions, please contact Jamil Ahmad Kassem.
+
+
+**Additional Resources:**
+
+- [MATLAB Documentation](https://www.mathworks.com/help/matlab/)
+- [Simulink for Discrete-Event Simulation](https://www.mathworks.com/solutions/discrete-event-simulation.html)
+
+By following this template, you can create a comprehensive README file that effectively communicates the purpose, usage, and contribution guidelines of your MATLAB project.
+::contentReference[oaicite:0]{index=0}
