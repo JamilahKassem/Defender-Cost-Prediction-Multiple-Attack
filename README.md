@@ -45,6 +45,8 @@ Edit the config.m file to set up your simulation parameters, including the numbe
 2. Run the Simulation:
 
 Execute the main script to start the simulation:
+   Main
+
 Main
 3. View Results:
 
