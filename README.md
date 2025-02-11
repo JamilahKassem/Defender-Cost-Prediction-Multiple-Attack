@@ -37,11 +37,11 @@ Add the project directory to the MATLAB path:
 addpath(genpath('path_to_your_project_directory'));
 
 Usage
-1.Configure Simulation Parameters:
+1. Configure Simulation Parameters:
 
 Edit the config.m file to set up your simulation parameters, including the number of nodes, resources, and attack scenarios.
 
-2.Run the Simulation:
+2. Run the Simulation:
 
 Execute the main script to start the simulation:
 Main
