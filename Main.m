@@ -1,113 +1,158 @@
-% close all;
-clear;clc;
-format rational;
-Data.m = 20;
-Data.n = 12;
-Number_of_attacks = 7;
-if Number_of_attacks < 1
-    return;
-end
-max_criticality = 12;
-min_criticality = 6;
-Data.Cs = 0.1;
-Data.Cm = 0.01;
-Data.backup_count_resource = 10;
-Data.backup_count = 10;
+function [] = Main()
+    close all;
+    m=20;
+    n=12;
+    min_criticality=6;
+    max_criticality=12;
+    Cost_move=0.1;
+    Cost_attack=2/3;
+    deviation=0;
+    Na=6;
+    
+    %% Create Plot Interface
+    f=figure('Visible','off');
+    subgroup1 = uipanel('Parent', f, 'Units', 'normal', 'Position', [0 0 1 1]);
+    subgroup1_plotbox = uipanel('Parent', subgroup1, 'Units', 'normal', 'Position', [0 .1 1 .9]);
+    sugroup1_controls = uipanel('Parent', subgroup1, 'Units', 'normal', 'Position', [0 0 1 .1]);
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0 0 .05 .8],'String',...
+        'm','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(m), 'Units', 'normal',...
+        'Position', [.05 .1 .05 .8],'Callback', @Setm,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.1 0 .05 .8],'String',...
+        'n','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(n), 'Units', 'normal',...
+        'Position', [.15 .1 .05 .8],'Callback', @Setn,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.2 0 .12 .8],'String',...
+        'Criticality','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(min_criticality), 'Units', 'normal',...
+        'Position', [.32 .1 .05 .8],'Callback', @SetCn,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.37 0 .02 .8],'String',...
+        '-','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(max_criticality), 'Units', 'normal',...
+        'Position', [.39 .1 .05 .8],'Callback', @SetCm,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.44 0 .05 .8],'String',...
+        'Cm','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(Cost_move), 'Units', 'normal',...
+        'Position', [.49 .1 .05 .8],'Callback', @SetCv,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.54 0 .05 .8],'String',...
+        'Ca','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(Cost_attack), 'Units', 'normal',...
+        'Position', [.59 .1 .05 .8],'Callback', @SetCa,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.64 0 .12 .8],'String',...
+        'deviation','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(deviation), 'Units', 'normal',...
+        'Position', [.76 .1 .05 .8],'Callback', @Setdeviation,'Parent', sugroup1_controls );
+    
+    uicontrol('Style','text', 'Units', 'normal','Position',[0.81 0 .05 .8],'String',...
+        'Na','Parent', sugroup1_controls,'FontSize',12);
+    uicontrol('Style', 'edit','string',num2str(Na), 'Units', 'normal',...
+        'Position', [.86 .1 .05 .8],'Callback', @SetNa,'Parent', sugroup1_controls );
+    
+    uicontrol('Style', 'pushbutton','string','Plot', 'Units', 'normal',...
+        'Position', [.91 .1 .09 .8],'Callback', @PlotStart,'Parent', sugroup1_controls );
+    f.Visible = 'on';
+    %% Create Plot Interface
 
-Data.debug = false;
+    %% Create First Interface
 
-deviations   = 0:25:0;
-cost_attack  = zeros(size(deviations,2),Number_of_attacks);
-cost_defense = zeros(size(deviations,2),Number_of_attacks);
+    %% Create First Interface
 
-for j = 1:size(deviations,2)
-    Data.R = createR(Data.m,min_criticality,max_criticality,deviations(j));
-    Data.cost = zeros(Number_of_attacks,1);
-    if Data.debug
-        outputfile = "deviations " + num2str(deviations(j)) + ".txt";
-        if j == 1
-            Data.fileID = fopen(outputfile,'w');
+    PlotStart();
+
+    function PlotStart(~,~)
+        % subgroup1.Visible = 'off';
+        plot_function(m,n,max_criticality,min_criticality,Cost_attack,Cost_move,deviation,Na,subgroup1_plotbox)
+    end
+    
+    function Setm(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','20');
+            warndlg('Input must be numerical');
         else
-            Data.fileID = fopen(outputfile,'a');
+            m=str2num(str);
         end
-        fprintf(Data.fileID,'\n--------------------Started New Simulation Deviation %d--------------------\n',deviations(j));
     end
-    [cost_attack(j,:),cost_defense(j,:)] = simulate_attack_multiple(Data,Number_of_attacks);
-    if Data.debug
-        fprintf(Data.fileID,'attack cost [');
-        for c = 1:size(cost_attack,2)
-            if c == 1
-                fprintf(Data.fileID,'%f',cost_attack(c));
-            else
-                fprintf(Data.fileID,',%f',cost_attack(c));
-            end
+    function Setn(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','12');
+            warndlg('Input must be numerical');
+        elseif str2num(str) < Na
+            set(src,'string',num2str(n));
+            warndlg('Number of nodes cannot be less than the number of attacks');
+        else
+            n=str2num(str);
         end
-        fprintf(Data.fileID,']\n');
-        fprintf(Data.fileID,'defense cost [');
-        for c = 1:size(cost_defense,2)
-            if c == 1
-                fprintf(Data.fileID,'%f',cost_defense(c));
-            else
-                fprintf(Data.fileID,',%f',cost_defense(c));
-            end
+    end
+    function SetNa(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','12');
+            warndlg('Input must be numerical');
+        elseif str2num(str) > n
+            set(src,'string',num2str(Na));
+            warndlg('Number of attacks cannot be greate than the number of nodes');
+        else
+            Na=str2num(str);
         end
-        fprintf(Data.fileID,']\n');
-        fclose(Data.fileID);
+    end
+    function SetCv(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','0.1');
+            warndlg('Input must be numerical');
+        else
+            Cost_move=str2num(str);
+        end
+    end
+    function SetCa(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','0.01');
+            warndlg('Input must be numerical');
+        else
+            Cost_attack=str2num(str);
+        end
+    end
+    function Setdeviation(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','0');
+            warndlg('Input must be numerical');
+        else
+            deviation=str2num(str);
+        end
+    end
+    function SetCn(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','6');
+            warndlg('Input must be numerical');
+        elseif str2num(str) > max_criticality
+            set(src,'string',num2str(min_criticality));
+            warndlg('Min crticality cannot be greater than max criticality');
+        else
+            min_criticality=str2num(str);
+        end
+    end
+    function SetCm(src,~)
+        str=get(src,'String');
+        if isempty(str2num(str))
+            set(src,'string','12');
+            warndlg('Input must be numerical');
+        elseif str2num(str) < min_criticality
+            set(src,'string',num2str(max_criticality));
+            warndlg('Max crticality cannot be less than min criticality');
+        else
+            max_criticality=str2num(str);
+        end
     end
 end
-
-fprintf("Total Criticiality %s \nThe average ciriticality over nodes %s\n",strtrim(rats(sum(Data.R))),strtrim(rats(sum(Data.R)/Data.n)));
-
-h = figure;
-Number_of_attacks = Number_of_attacks - 1;
-temp = zeros(1,Number_of_attacks);
-for j = 1:size(deviations,2)
-    for k = 1:Number_of_attacks
-        temp(k) = cost_attack(j,k);
-    end
-    plot(1:Number_of_attacks,temp);
-    if j == 1
-        hold on;
-    end
-    for k = 1:Number_of_attacks
-        temp(k) = cost_defense(j,k);
-    end
-    plot(1:Number_of_attacks,temp);
-    for k = 1:Number_of_attacks
-        temp(k) = cost_defense(j,k) + cost_attack(j,k);
-    end
-    plot(1:Number_of_attacks,temp);
-end
-
-yline(sum(Data.R)/Data.n,'-','Tr / n');
-hold off;
-xlabel('Attack number');
-ylabel('Expected cost of attack');
-i = 1;
-legends = strings(1, size(deviations,2) * 3);
-
-for deviation = deviations
-    text = 'Attack cost';
-    legends(i) = text;
-    i = i + 1;
-    text = 'Relocating cost';
-    legends(i) = text;
-    i = i + 1;
-    text = 'Total cost';
-    legends(i) = text;
-    i = i + 1;
-end
-
-ylim([0 inf]);
-xticks(0:1:Number_of_attacks);
-legend(legends);
-grid on;
-set(h,'papersize',[6 5]);
-set(h, 'PaperPosition', [0 0 6 5]);
-file_name = ['bias_Na_',num2str(Number_of_attacks),'_C_',num2str(min_criticality), ...
-    '-',num2str(max_criticality),'_Tr_',num2str(sum(Data.R)),'_D_',num2str(deviations(1)),'-',num2str(deviations(end)), ...
-    '_m_',num2str(Data.m),'_backups_',num2str(Data.backup_count),'.pdf'];
-fprintf(['Created file ',file_name,'\n']);
-fprintf('Total cost %f Total Criticality %f\n',sum(cost_attack+cost_defense),sum(Data.R));
-print(h,file_name,'-dpdf');
-fclose('all');

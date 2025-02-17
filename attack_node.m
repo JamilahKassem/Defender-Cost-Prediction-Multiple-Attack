@@ -1,4 +1,7 @@
 cost_attack_current = 0;
+% if attacked_node > n
+%     attacked_node = n;
+% end
 %% ------------------------- create new state start -------------------------
 next_state_stack(number_next_states) = state;
 next_state_stack(number_next_states).R = R;
@@ -17,7 +20,7 @@ k = 1;
 for j = 1:m
     if alpha(j,attacked_node) ~= 0
         if alpha(j,attacked_node) == 1
-            cost_attack_current = cost_attack_current + R(j) * iteration_probability * Data.Cs;
+            cost_attack_current = cost_attack_current + R(j) * iteration_probability * Data.Ca;
         else
             % store data of all resources that might get hit
             hit_resources_set(k).alpha = alpha(j,attacked_node);

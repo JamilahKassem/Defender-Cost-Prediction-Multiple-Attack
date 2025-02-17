@@ -6,8 +6,6 @@ function [cost_attack,cost_defense] = simulate_attack_multiple(Data,total_attack
 n = Data.n;
 m = Data.m;
 R = Data.R;
-backup_count = Data.backup_count;
-activated_alpha = zeros(m,n);
 %% ------------------------------- Read Data end-----------------------------
 cost_attack = zeros(total_attacks,1);
 cost_defense = zeros(total_attacks,1);
@@ -86,12 +84,13 @@ while attack_counter < total_attacks + 1
     if attack_counter == 1
         alpha = createA(R,n,[],Data);
         % create A matrix
-        alpha_backup = create_backup_A(alpha,backup_count,Data);
+        activated_alpha = alpha ~= 0;
+        alpha_backup = create_backup_A(alpha,Data);
         temp = alpha_backup ~= 0;
         activated_alpha = activated_alpha | temp;
     else
         if Data.debug
-            fprintf(Data.fileID,'Creating new alpha\n');
+            fprintf(Data.fileID,'Generating new alpha matrix\n');
         end
         alpha = createA(R,n,activated_alpha,Data);
         % create A matrix
@@ -118,13 +117,13 @@ while attack_counter < total_attacks + 1
     %% ------------------------------ debug alpha end----------------------------
     %% ----------------------------- No bias alpha end---------------------------
     if attack_counter ~= 1
-        cost_defense(attack_counter - 1) = cost_defense(attack_counter - 1) + calculate_cost_movement(activated_alpha,alpha,R,Data.Cs);
+        cost_defense(attack_counter - 1) = cost_defense(attack_counter - 1) + calculate_cost_movement(activated_alpha,alpha,R,Data.Cm);
     end
 
     temp = alpha ~= 0;
     activated_alpha = activated_alpha | temp;
 
-    [iteration_probabilities,Targeted_nodes,number_of_nodes] = select_nodes_for_attack(alpha);
+    [iteration_probabilities,Targeted_nodes,number_of_nodes] = select_nodes_for_attack(alpha,n,Data.target_node);
     % create an array of attacked nodes
     for i = 1:number_of_nodes
         attacked_node = Targeted_nodes(i);
@@ -214,7 +213,7 @@ while state_counter <= number_current_states
     end
     %% ------------------------------ debug states end---------------------------
     state_counter = state_counter + 1;
-    cost_defense(attack_counter - 1) = cost_defense(attack_counter - 1) + calculate_cost_movement(activated_alpha,alpha,R,Data.Cs);
+    cost_defense(attack_counter - 1) = cost_defense(attack_counter - 1) + calculate_cost_movement(activated_alpha,alpha,R,Data.Cm);
 end
 if Data.debug
     fprintf(Data.fileID,'Total bumber of iterations %d\n',iteration_counter);
