@@ -1,4 +1,4 @@
-function [] = plot_function(m,n,max_criticality,min_criticality,Ca,Cm,deviation,Na,h)
+function [] = plot_function(m,n,max_criticality,min_criticality,Ca,Cm,deviation,Na,h,save_plot)
 format rational;
 Data.m = m;
 Data.n = n;
@@ -14,7 +14,9 @@ if min_criticality >= max_criticality
     return;
 end
 Data.Ca = Ca;
-Data.Cm = Cm;
+% change to mc
+Data.Cm = Cm; 
+% change to mr
 Data.backup_count = 10;
 Data.backup_per_resource = 4;
 
@@ -75,11 +77,13 @@ grid on;
 fclose('all');
 % set(h,'papersize',[6 5]);
 % set(h, 'PaperPosition', [0 0 6 5]);
-file_name = ['bias_Na_',num2str(Number_of_attacks),'_C_',num2str(min_criticality), ...
-    '-',num2str(max_criticality),'_Tr_',num2str(sum(Data.R)),'_D_',num2str(deviation), ...
-    '_m_',num2str(Data.m),'_backups_',num2str(Data.backup_count),'.pdf'];
-exportgraphics(h, file_name)
+if save_plot
+    file_name = ['bias_Na_',num2str(Number_of_attacks),'_C_',num2str(min_criticality), ...
+        '-',num2str(max_criticality),'_Tr_',num2str(sum(Data.R)),'_D_',num2str(deviation), ...
+        '_m_',num2str(Data.m),'_backups_',num2str(Data.backup_count),'.pdf'];
+    exportgraphics(h, file_name)
+    fprintf(['Created file ',file_name,'\n']);
+end
 fprintf('Total cost %f Total Criticality %f\n',sum(cost_attack+cost_defense),sum(Data.R));
-fprintf(['Created file ',file_name,'\n']);
 end
 

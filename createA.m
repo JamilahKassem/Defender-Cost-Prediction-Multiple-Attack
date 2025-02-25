@@ -46,6 +46,7 @@ end
 for i = 1:m
     alpha(i,n) = 1 - sum(alpha(i,1:n-1));
 end
+%% Apply hungerian algorithm
 if size(activated_alpha,2) ~= 0
     if Data.debug
         fprintf(Data.fileID,'alpha unarranged\n');
@@ -108,3 +109,4 @@ if size(activated_alpha,2) ~= 0
     end
     alpha = A_permuted;
 end
+%% Apply hungerian algorithm

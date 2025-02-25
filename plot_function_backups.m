@@ -1,4 +1,4 @@
-function [] = plot_function_backups(m,n,max_criticality,min_criticality,Ca,Cm,deviation,Na,h)
+function [] = plot_function_backups(m,n,max_criticality,min_criticality,Ca,Cm,deviation,Na,h,save_plot)
 format rational;
 Data.m = m;
 Data.n = n;
@@ -95,5 +95,12 @@ grid on;
 %     '-',num2str(max_criticality),'_Tr_',num2str(sum(Data.R)),'_Backups_for_resource_',num2str(Backups_per_resource(1)),'-',num2str(Backups_per_resource(end)), ...
 %     '_m_',num2str(Data.m),'_deviation_',num2str(deviation),'_backups_',num2str(backup_counts(1)),'_',num2str(backup_counts(end)),'.pdf'];
 % print(h,file_name,'-dpdf');
+if save_plot
+file_name = ['backups_resource_Na_',num2str(Number_of_attacks),'_C_',num2str(min_criticality), ...
+    '-',num2str(max_criticality),'_Tr_',num2str(sum(Data.R)),'_Backups_for_resource_',num2str(Backups_per_resource(1)),'-',num2str(Backups_per_resource(end)), ...
+    '_m_',num2str(Data.m),'_deviation_',num2str(deviation),'_backups_',num2str(backup_counts(1)),'_',num2str(backup_counts(end)),'.pdf'];
+    exportgraphics(h, file_name)
+    fprintf(['Created file ',file_name,'\n']);
+end
 end
 

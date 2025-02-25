@@ -8,11 +8,15 @@ function [] = Main()
     Cost_attack=2/3;
     deviation=0;
     Na=6;
+    save_plot=false;
+    type = 1;
     
     %% Create Plot Interface
     f=figure('Visible','off');
     subgroup1 = uipanel('Parent', f, 'Units', 'normal', 'Position', [0 0 1 1]);
-    subgroup1_plotbox = uipanel('Parent', subgroup1, 'Units', 'normal', 'Position', [0 .1 1 .9]);
+    uicontrol('Style', 'pushbutton','string','Select Plot Type', 'Units', 'normal',...
+        'Position', [0 .97 1 .03],'Callback', @back,'Parent', subgroup1 );
+    subgroup1_plotbox = uipanel('Parent', subgroup1, 'Units', 'normal', 'Position', [0 .1 1 .87]);
     sugroup1_controls = uipanel('Parent', subgroup1, 'Units', 'normal', 'Position', [0 0 1 .1]);
     
     uicontrol('Style','text', 'Units', 'normal','Position',[0 0 .05 .8],'String',...
@@ -57,18 +61,46 @@ function [] = Main()
     
     uicontrol('Style', 'pushbutton','string','Plot', 'Units', 'normal',...
         'Position', [.91 .1 .09 .8],'Callback', @PlotStart,'Parent', sugroup1_controls );
+    subgroup1.Visible = 'off';
     f.Visible = 'on';
     %% Create Plot Interface
 
     %% Create First Interface
-
+    subgroup2 = uipanel('Parent', f, 'Units', 'normal', 'Position', [0 0 1 1]);
+    uicontrol('Style','text', 'Units', 'normal','Position',[0 0.95 1 .05],'String',...
+        'Please select plot type','Parent', subgroup2,'FontSize',12);
+    uicontrol('Style', 'pushbutton','string','Plot variarion of attack count', 'Units', 'normal',...
+        'Position', [0 0 0.5 .95],'Callback', @StartState1,'Parent', subgroup2 );
+    uicontrol('Style', 'pushbutton','string','Plot variation of backups', 'Units', 'normal',...
+        'Position', [0.5 0 0.5 .95],'Callback', @StartState2,'Parent', subgroup2 );
     %% Create First Interface
 
-    PlotStart();
+    function back(~,~)
+        subgroup1.Visible = 'off';
+        subgroup2.Visible = 'on';
+    end
+
+    function StartState1(~,~)
+        type = 1;
+        delete(allchild(subgroup1_plotbox));
+        subgroup2.Visible = 'off';
+        subgroup1.Visible = 'on';
+    end
+
+    function StartState2(~,~)
+        type = 2;
+        delete(allchild(subgroup1_plotbox));
+        subgroup2.Visible = 'off';
+        subgroup1.Visible = 'on';
+    end
 
     function PlotStart(~,~)
-        % subgroup1.Visible = 'off';
-        plot_function(m,n,max_criticality,min_criticality,Cost_attack,Cost_move,deviation,Na,subgroup1_plotbox)
+        switch type
+            case 1
+            plot_function(m,n,max_criticality,min_criticality,Cost_attack,Cost_move,deviation,Na,subgroup1_plotbox,save_plot)
+            case 2
+            plot_function_backups(m,n,max_criticality,min_criticality,Cost_attack,Cost_move,deviation,Na,subgroup1_plotbox,save_plot)
+        end
     end
     
     function Setm(src,~)
