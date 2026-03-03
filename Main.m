@@ -1,7 +1,6 @@
 function [] = Main()
     close all;
-    m=20;
-    n=12;
+    m=20;n=12;
     min_criticality=6;
     max_criticality=12;
     Cost_move=0.1;
